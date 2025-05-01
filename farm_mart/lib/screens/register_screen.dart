@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import '../constants/colors.dart';
 import '../widgets/gradient_background.dart';
 
@@ -185,6 +185,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Expanded(
                                 child: RadioListTile<String>(
                                   title: const Text('Wholesaler'),
+                                  dense: true,
+                                  isThreeLine: false,
                                   value: 'wholesaler',
                                   groupValue: _userType,
                                   activeColor: AppColors.primary,
@@ -240,8 +242,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             controller: _phoneController,
                             hintText: 'Phone Number',
                             icon: Icons.phone,
-                            keyboardType: TextInputType.phone,
+                            keyboardType: TextInputType.number,
                             maxLength: 10,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(10),
+                            ],
                             required: true,
                           ),
                           const SizedBox(height: 10),
@@ -284,6 +290,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               icon: Icons.lock_outline,
                               keyboardType: TextInputType.number,
                               maxLength: 6,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(6),
+                              ],
                               required: true,
                             ),
                             const SizedBox(height: 10),
@@ -358,7 +368,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               hintText: 'Pincode',
                               icon: Icons.location_on,
                               keyboardType: TextInputType.number,
-                              maxLength: 6,
+                              maxLength: 7,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(7),
+                              ],
                               required: true,
                             ),
                             const SizedBox(height: 15),
@@ -370,6 +384,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               icon: Icons.credit_card,
                               keyboardType: TextInputType.number,
                               maxLength: 12,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(12),
+                              ],
                               required: true,
                             ),
                             const SizedBox(height: 15),
@@ -437,6 +455,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     TextInputType keyboardType = TextInputType.text,
     int? maxLength,
     int maxLines = 1,
+    List<TextInputFormatter>? inputFormatters,
     TextCapitalization textCapitalization = TextCapitalization.none,
     bool required = false,
   }) {
@@ -458,6 +477,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         maxLength: maxLength,
         maxLines: maxLines,
         textCapitalization: textCapitalization,
+        inputFormatters: inputFormatters,
         onChanged: (value) {
           // Force UI update for buttons that depend on field values
           setState(() {});
