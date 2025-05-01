@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../widgets/gradient_background.dart';
+import '../api_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,7 +23,19 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _sendOtp() {
+  void _sendOtp() async{
+    final phone = _phoneController.text.trim();
+
+  if (phone.length != 10) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter a valid 10-digit phone number.')),
+    );
+    return;
+  }
+
+  try {
+    bool success = await ApiService.sendOtp(phone);
+    if (success) {
     // Here you would implement the actual OTP sending logic
     // For now, we'll just toggle the state
     setState(() {
@@ -32,10 +45,34 @@ class _LoginScreenState extends State<LoginScreen> {
       const SnackBar(content: Text('OTP sent successfully!')),
     );
   }
+  else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to send OTP. Try again.')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  }
+}
 
-  void _verifyOtp() {
+  void _verifyOtp()async {
     // Here you would implement the actual OTP verification logic
     // For now, we'll just toggle the state
+    final phone = _phoneController.text.trim();
+  final otp = _otpController.text.trim();
+
+  if (otp.length != 6) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter a 6-digit OTP.')),
+    );
+    return;
+  }
+
+  try {
+    bool verified = await ApiService.verifyOtp(phone, otp);
+    if (verified) {
     setState(() {
       _otpVerified = true;
     });
@@ -56,7 +93,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid OTP. Please try again.')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
   }
+}
 
   void _continueToHome() {
     // Navigate to home screen or next screen
