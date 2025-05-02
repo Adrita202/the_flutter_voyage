@@ -8,7 +8,7 @@ import 'screens/cart_screen.dart';
 import 'screens/profile_screen.dart';
 import 'constants/colors.dart';
 import 'screens/product_details_screen.dart';
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   runApp(const MyApp());
 }
@@ -33,12 +33,13 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           bodyLarge: TextStyle(color: AppColors.textDark),
-          bodyMedium: TextStyle(color: AppColors.textLight),
+          bodyMedium: TextStyle(color: Color.fromARGB(255, 3, 3, 3)),
         ),
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const LoginScreen(),
+         '/': (context) => const LoginScreen(), 
+        '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/farmer_home': (context) => const FarmerHomeScreen(),
         '/wholesaler_home': (context) => const WholesalerHomeScreen(),
